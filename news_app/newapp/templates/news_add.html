@@ -1,0 +1,15 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Add News {{ post }} {% endblock title %}
+
+{% block content %}
+<br>
+<h3>Создать новость</h3>
+<br>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
+    <input type="submit" value="Добавить статью">
+</form>
+
+{% endblock content %}

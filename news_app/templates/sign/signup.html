@@ -1,0 +1,14 @@
+<!--шаблон, который создает нашу форму для регистрации новых пользователей на основе модели-->
+
+{% extends "main.html" %}
+
+{% block content %}
+<h2> Регистрация нового пользователя </h2>
+(шаблон templates\protect\index.html)
+<hr>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Продолжить">
+</form>
+{% endblock %}

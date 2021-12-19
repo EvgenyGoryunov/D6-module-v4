@@ -1,0 +1,19 @@
+<!--Обратите внимание на название базового шаблона. Для полноценной работоспособности без дополнительной кастомизации
+он должен быть именно base.html. Этого достаточно для регистрации и входа по почте.
+этот шаблон включается автоматом, когда мы в настройках сеттингах указали переход на аккщунты-->
+from django.contrib import admin
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block head_title %}{% endblock head_title %}</title>
+    </head>
+    <body>
+        {% block body %}
+        {% block content %}
+        {% endblock content %}
+        {% endblock body %}
+        {% block extra_body %}
+        {% endblock extra_body %}
+    </body>
+</html>

@@ -1,0 +1,50 @@
+from .views.py
+# from datetime import datetime
+# from django.shortcuts import render
+# from django.views import View  # импортируем простую вьюшку
+# from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
+# from django.views.generic import ListView
+# from django.forms import ModelForm, BooleanField  # Импортируем true-false поле
+
+
+
+<!--{% load custom_filters %}-->
+
+
+<!-- <a href="{% url 'news_detail' post.id %}"><u>Подробнее</u></a>  При нажатии на имя нас теперь будет перекидывать на страницу с самого товара -->
+<!-- <a href="{% url 'news_edit' post.id %}"><u>Редактировать</u></a>   добавим ссылку на редактирование товара-->
+<!-- <a href="{% url 'news_delete' post.id %}"><u>Удалить</u></a>   добавим ссылку на удаление товара-->
+
+
+<!--{% for post in filter.qs %}-->
+<!--{% endfor %}-->
+
+
+
+<!-- Проверяем что поддерживается постраничный вывод -->
+{% if is_paginated %}
+
+<!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+{% if page_obj.has_previous %}
+<a href="?page=1">First</a>
+<a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+{% endif %}
+
+<!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a>{{ num }}</a>
+{% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+<a href="?page={{ num }}">{{ num }}</a>
+{% endif %}
+{% endfor %}
+
+<!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">>>></a>
+<a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+{% endif %}
+
+
+<!--<h3><a href="{% url 'news_detail' post.id %}"><u>{{ post }}</u></a> </h3>  При нажатии на имя нас теперь будет перекидывать на страницу с самого товара -->
