@@ -34,7 +34,7 @@ class AppointmentView(View):
             message=appointment.message,  # сообщение с кратким описанием проблемы
             from_email='factoryskill@yandex.ru',  # почта с которой отправляем письма
             recipient_list=['ges1987@list.ru'],  # список получателей, например, секретарь, врач и т. д.
-            fail_silently=False,
+            # fail_silently=False,  # если сервак с почтой сломался, чтоб наш код в ошибку тоже не упал
         )
 
         return redirect('make_appointment')
