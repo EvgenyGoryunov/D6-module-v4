@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Запись на прием</title>
+    (шаблон appointments\templates\make_appointment.html)
+</head>
+<body>
+
+<h1>Запись на прием</h1>
+
+<form method="post"  >
+    {% csrf_token %}
+
+    <label for="client_name">Ваше имя</label>
+    <input type="text" name="client_name">
+    <br>
+
+    <label for="message">Краткое описание проблемы</label>
+    <input type="text" name="message">
+    <br>
+
+    <label for="date">Время приема</label>
+    <input type="date" name="date">
+    <br>
+
+    <!--кнопка отправки данных-->
+    <input type="submit" value="Продолжить">
+</form>
+
+
+</body>
+</html>
+
+
+<!--убрано из form не понятно что это и зачем-->
+<!--enctype="multipart/form-data"-->
+<!--action="{% url 'make_appointment' %}"-->

@@ -1,63 +1,12 @@
-from datetime import datetime
-
-from django.contrib.auth.mixins import PermissionRequiredMixin  # модуль Д5, для ограничения прав доступа (см ниже)
-from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
-# модуль Д6
-# класс для отправки писем, нужной инфы и в нужном представлении
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
-from django.views import View  # модуль Д4
+from django.contrib.auth.mixins import PermissionRequiredMixin  # модуль Д5, чтоб ограничить права доступа
 # импортируем необходимые дженерики модуль Д4
-from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView  # модуль Д4
+from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 
-from .filters import NewsFilter  # импортируем написанный нами фильтр (с файла filters.py)# модуль Д4
-from .forms import NewsForm  # модуль Д1-4
-from .models import Appointment  # модуль Д6
-from .models import Post  # модуль Д1-4
-
-
-# модуль 6
-class AppointmentView(View):
-    # метод гет мы получаем шаблон-форму, которую мы заполняем
-    def get(self, request, *args, **kwargs):
-        return render(request, 'make_appointment.html', {})
-
-    # функция пост сохраняет данный шаблон с данными (отправляет его в базу данных, которую мы создали в моделях)
-    def post(self, request, *args, **kwargs):
-        appointment = Appointment(
-            date=datetime.strptime(request.POST['date'], '%Y-%m-%d'),
-            client_name=request.POST['client_name'],
-            message=request.POST['message'],
-        )
-        appointment.save()
-
-        # получаем наш html
-        html_content = render_to_string(
-            'appointment_created.html',
-            {
-                'appointment': appointment,
-            }
-        )
-
-        msg = EmailMultiAlternatives(
-            # тема письма, формируем как нам удобно
-            subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
-            # само сообщение
-            body=appointment.message,  # это то же, что и message
-            # от кого сообщение, должна быть именно ваша а не чья попало
-            from_email='ges300487@yandex.ru',
-            # список, кому нужно будет отправлять письма, всем и себе в том числе (как копию на всякий случай)
-            to=['ges1987@list.ru'],  # это то же, что и recipients_list
-            # fail_silently=False  # если какая-то ошбика или сервер умрет, пользователь не увидит ошибку
-        )
-        msg.attach_alternative(html_content, "text/html")  # добавляем html
-
-        msg.send()  # отсылаем
-
-        return redirect('appointments:make_appointment')
+from .filters import NewsFilter  # импортируем написанный нами фильтр (с файла filters.py)
+from .forms import NewsForm
+from .models import Post
 
 
-# модуль Д1-4
 class NewsList(ListView):
     model = Post  # указываем модель, объекты которой мы будем выводить
     # указываем имя шаблона, в котором будет лежать HTML, в котором будут все инструкции о том, как именно

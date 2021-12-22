@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+
+    # модуль Д6
+    'appointments',
+
 ]
 
 MIDDLEWARE = [
@@ -177,26 +181,17 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-
 # Чтобы allauth распознал нашу форму как ту, что должна выполняться вместо формы по умолчанию
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
-# модуль Д5
-# ОБЯЗАТЕЛЬНО СДЕЛАТЬ МИГРАЦИИ ЧТОБЫ ДОБАВИЛИСЬ В АДМИНКУ SOCIAL ACCOUNTS!!!
+# ОБАЗЯТЕЛЬНО СДЕЛАТЬ МИГРАЦИИ ЧТОБЫ ДОБАВИЛИСЬ В АДМИНКУ SOCIAL ACCOUNTS!!!
 
 
-# модуль Д6 нужные настройки для отправки писем через почту яндекса
-EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один
+# Блок Д6 - настройка отправки почты
+
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
-EMAIL_HOST_USER = 'ges300487'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо
-# писать user, иными словами, это всё то что идёт до собаки
-EMAIL_HOST_PASSWORD = 's7u7p7e7r'  # пароль от почты
-EMAIL_USE_SSL = True  # Яндекс использует ssl, чтоб хакеры не перехватили, включать обязательно
-
-
-# модуль Д6 нужные настройки для отправки писем через почту яндекса
-ADMINS = [
-    ('Skavik', 'skavik46111@gmail.com'),
-    # список всех админов в формате ('имя', 'их почта')
-]
-SERVER_EMAIL = 'peterbadson@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
+EMAIL_HOST_USER = 'factoryskill'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо
+# писать user, иными словами, это всё то что идёт до собачки (@)
+EMAIL_HOST_PASSWORD = 'qazwsx963852'  # пароль от почты
+EMAIL_USE_SSL = True  # Яндекс использует ssl, включать обязательно

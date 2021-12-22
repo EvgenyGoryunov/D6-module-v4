@@ -1,0 +1,30 @@
+
+<form method="post" action="{% url 'appointments:make_appointment' %}">
+    {% csrf_token %}
+    <label for="client_name">Ваше имя</label>
+    <input type="text" name="client_name">
+    <label for="message">Краткое описание проблемы</label>
+    <input type="text" name="message">
+    <label for="date">Время приема</label>
+    <input type="date" name="date">
+
+    <!--кнопка отправки данных-->
+    <input type="submit" value="Продолжить">
+</form>
+
+
+action="{% url 'appointments:make_appointment' %}"
+
+    <label for="client_name">Ваше имя</label>
+    <input type="text" name="client_name">
+    <br>
+
+    <label for="message">Краткое описание проблемы</label>
+    <input type="text" name="message">
+    <br>
+
+    <label for="date">Время приема</label>
+    <input type="date" name="date">
+    <br>
+
+action="{% url 'make_appointment' %}"

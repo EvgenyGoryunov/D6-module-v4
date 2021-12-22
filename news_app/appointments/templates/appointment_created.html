@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>(имя из базы) {{ appointment.client_name }} Спасибо за запись!</h2>
+    <p> Вы записаны на (дата из базы) {{ appointment.date|date:"d-M-Y" }} по вопросу: (сообщение из базы) {{ appointment.message|truncatechars:50 }} </p>
+    (шаблон appointments\templates\appointment_created.html)
+</body>
+</html>

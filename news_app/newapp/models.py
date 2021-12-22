@@ -1,25 +1,8 @@
-from datetime import datetime  # модуль Д6
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 
 
-# модуль Д6
-class Appointment(models.Model):
-    date = models.DateField(
-        default=datetime.utcnow,
-    )
-    client_name = models.CharField(
-        max_length=200
-    )
-    message = models.TextField()
-
-    def __str__(self):
-        return f'{self.client_name}: {self.message}'
-
-
-# модуль Д1-3
 # Модель, содержащая объекты всех авторов и имеет следующие поля:
 class Author(models.Model):
     # cвязь «один к одному» с встроенной моделью пользователей User;
@@ -157,9 +140,12 @@ class Comment(models.Model):
         return f'{self.commentUser}: {self.text[:20]}'
 
 # Осталось с прошлой жизни код, храню на всякий случай
+
 # Промежуточная модель для связи «многие ко многим»:
 # class PostCategory(models.Model):
+
 # связь «один ко многим» с моделью Post;
 #    postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
+
 # связь «один ко многим» с моделью Category.
 #    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)

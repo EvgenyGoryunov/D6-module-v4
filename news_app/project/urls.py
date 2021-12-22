@@ -3,7 +3,11 @@ from django.urls import path, include
 
 urlpatterns = [
 
-    # Модуль Д5
+    # модуль Д6 - отправка писем
+
+    path('appointment/', include('appointments.urls')),
+
+    # Модуль Д5 - регистрация пользователей
 
     # при переходе по адресу http://127.0.0.1:8000/admin/ будет запускаться приложение admin.site.urls,
     # (панель администратора в нашем случае)
@@ -26,7 +30,7 @@ urlpatterns = [
     # авторизоваться здесь делаем переадресацию на приложение allauth.urls
     path('accounts/', include('allauth.urls')),
 
-    # Модуль Д4, осталось без изменений
+    # Модуль Д4 - вывод информации из БЗ, ее редактирование и создание
 
     path('pages/', include('django.contrib.flatpages.urls')),
     path('news/', include('newapp.urls')),
