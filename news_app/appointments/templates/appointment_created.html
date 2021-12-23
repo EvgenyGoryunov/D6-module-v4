@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>(имя из базы) {{ appointment.client_name }} Спасибо за запись!</h2>
-    <p> Вы записаны на (дата из базы) {{ appointment.date|date:"d-M-Y" }} по вопросу: (сообщение из базы) {{ appointment.message|truncatechars:50 }} </p>
-    (шаблон appointments\templates\appointment_created.html)
+    <h2> {{ appointment.client_name }} Спасибо за запись!</h2>
+    <p> Вы записаны на {{ appointment.date|date:"d-M-Y" }} по вопросу: {{ appointment.message|truncatechars:50 }} </p>
+        (шаблон appointments\templates\appointment_created.html)
 </body>
 </html>

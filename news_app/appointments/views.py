@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives, mail_admins
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.views import View
 
 from .models import Appointment
@@ -28,13 +29,42 @@ class AppointmentView(View):
         # сообщение содержащее краткую суть проблемы и в заключении добавить дату записи. И всё это отправлялось на
         # почту любому адресату
 
-        send_mail(
-            subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
-            # имя клиента и дата записи будут в теме для удобства
-            message=appointment.message,  # сообщение с кратким описанием проблемы
-            from_email='factoryskill@yandex.ru',  # почта с которой отправляем письма
-            recipient_list=['ges1987@list.ru'],  # список получателей, например, секретарь, врач и т. д.
-            # fail_silently=False,  # если сервак с почтой сломался, чтоб наш код в ошибку тоже не упал
+        # Автоотправка сообщений, пока временно оключено, чтоб другой способ проверить (ниже) - отправка шаблона
+        # send_mail(
+        #     subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
+        #     # имя клиента и дата записи будут в теме для удобства
+        #     message=appointment.message,  # сообщение с кратким описанием проблемы
+        #     from_email='factoryskill@yandex.ru',  # почта с которой отправляем письма
+        #     recipient_list=['ges1987@list.ru'],  # список получателей, например, секретарь, врач и т. д.
+        #     # fail_silently=False,  # если сервак с почтой сломался, чтоб наш код в ошибку тоже не упал
+        # )
+
+        # Пример с отправкой сообщений с шаблонов внутри
+        # # получаем наш html, чтоб запихнуть его в наше сообщение и отправить, предварительно создав шаблон
+        # html_content = render_to_string(
+        #     'appointment_created.html',
+        #     {
+        #         'appointment': appointment,
+        #     }
+        # )
+
+        # # отправка целой странички (шаблона) в письме
+        # msg = EmailMultiAlternatives(
+        #     subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
+        #     body=appointment.message,  # это то же, что и message
+        #     from_email='factoryskill@yandex.ru',
+        #     to=['ges1987@list.ru'],  # это то же, что и recipients_list
+        # )
+        # msg.attach_alternative(html_content, "text/html")  # добавляем html
+        #
+        # msg.send()  # отсылаем
+
+        # отправляем письмо всем админам по аналогии с send_mail, только здесь получателя указывать не надо, его
+        # автоматом возьмем из базы данных пользователей со статусом админ, либо другим, кого укажем, нужно добавить
+        # настройки в сеттинги проекта
+        mail_admins(
+            subject=f'{appointment.client_name} {appointment.date.strftime("%d %m %Y")}',
+            message=appointment.message,
         )
 
         return redirect('make_appointment')
@@ -47,20 +77,6 @@ class AppointmentView(View):
         # ячейки таблицы (БД). То есть создали объект (=строчка) в нашей таблице (=база данных). В конце, мы просим
         # опять перейти на данную страницу make_appointment после return
 
-        # получаем наш html
-        # html_content = render_to_string(
-        #     'appointment_created.html',
-        #     {
-        #         'appointment': appointment,
-        #     }
-        # )
 
-        # msg = EmailMultiAlternatives(
-        #     subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
-        #     body=appointment.message,  # это то же, что и message
-        #     from_email='peterbadson@yandex.ru',
-        #     to=['skavik46111@gmail.com'],  # это то же, что и recipients_list
-        # )
-        # msg.attach_alternative(html_content, "text/html")  # добавляем html
-        #
-        # msg.send()  # отсылаем
+
+

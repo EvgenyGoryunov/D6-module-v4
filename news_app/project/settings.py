@@ -187,7 +187,7 @@ ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 # ОБАЗЯТЕЛЬНО СДЕЛАТЬ МИГРАЦИИ ЧТОБЫ ДОБАВИЛИСЬ В АДМИНКУ SOCIAL ACCOUNTS!!!
 
 
-# Блок Д6 - настройка отправки почты
+# Модуль Д6 - настройка отправки почты
 
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
@@ -195,3 +195,10 @@ EMAIL_HOST_USER = 'factoryskill'  # ваше имя пользователя, н
 # писать user, иными словами, это всё то что идёт до собачки (@)
 EMAIL_HOST_PASSWORD = 'qazwsx963852'  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, включать обязательно, защита от хакеров
+
+# ADMINS = [
+#     ('Skavik', 'ges1987@list.ru')
+#     # список всех админов в формате ('имя', 'их почта')
+# # , 'Yandex', 'ges30087@list.ru'
+# ]
+SERVER_EMAIL = 'factoryskill@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
