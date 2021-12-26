@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Список подписчиков по группам {% endblock title %}
+
+
+{% block content %}
+    <h2>Список всех фильмов</h2>
+    <ul>
+        {% for subscriber in subs %}
+            <li> {{ subscriber.name }} </li>
+        {% endfor%}
+        <hr>
+         {% for subscriber in subs %}
+            <li> {{ subscriber.user }} </li>
+        {% endfor%}
+    </ul>
+{% endblock content %}

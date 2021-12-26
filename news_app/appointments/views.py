@@ -9,6 +9,7 @@ from .models import Appointment
 
 
 # обрабатывает запрос и сохраняет новые объекты в БД (в базе данных), models.py
+
 class AppointmentView(View):
     # получаем шаблон для ввода данных
     def get(self, request, *args, **kwargs):
@@ -79,4 +80,13 @@ class AppointmentView(View):
 
 
 
+from newapp.models import Category
 
+class AppointView(View):
+    # получаем шаблон для ввода данных
+    def get(self, request, *args, **kwargs):
+        # subscriber = Category.subscribers.name
+        subscriber = Category.objects.all()
+        return render(request, 'test.html', {
+            'subs': subscriber
+        })

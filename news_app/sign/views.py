@@ -43,7 +43,7 @@ class MyView(PermissionRequiredMixin, View):
 from django.views.generic.edit import CreateView
 class AddProduct(PermissionRequiredMixin, CreateView):
     permission_required = ('shop.add_product',)
-        # // customize form view
+
 # Если пользователь, который вызвал это представление относится к группе content-manager и для нее предоставлено
 # это право, то представление выполнится, как и планировалось. Если же пользователь таких прав не имеет, то Django
 # выбросит исключение PermissionDenied и пользователя перенаправит на страницу с ошибкой 403
