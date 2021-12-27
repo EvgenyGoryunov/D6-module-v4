@@ -83,10 +83,9 @@ class AppointmentView(View):
 from newapp.models import Category
 
 class AppointView(View):
-    # получаем шаблон для ввода данных
     def get(self, request, *args, **kwargs):
-        # subscriber = Category.subscribers.name
-        subscriber = Category.objects.all()
+        # subscriber = Category.objects.all().values('subscribers', 'name')
+        categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
         return render(request, 'test.html', {
-            'subs': subscriber
+            'subs': categorys
         })

@@ -6,12 +6,9 @@
 {% block content %}
     <h2>Список всех фильмов</h2>
     <ul>
-        {% for subscriber in subs %}
-            <li> {{ subscriber.name }} </li>
+        {% for categorys in subs %}
+            <li> Category: {{ categorys.name }}; UserName: {{ categorys.subscribers__username }}; Email: {{ categorys.subscribers__email }} </li>
         {% endfor%}
         <hr>
-         {% for subscriber in subs %}
-            <li> {{ subscriber.user }} </li>
-        {% endfor%}
     </ul>
 {% endblock content %}

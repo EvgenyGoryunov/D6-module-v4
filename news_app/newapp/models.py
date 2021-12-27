@@ -23,6 +23,7 @@ class Author(models.Model):
         pRat = 0
         pRat += postRat.get('postRating')
 
+
         # для комментов суммирование рейтинга, мы суммируем поле 'rating' класс Comment
         # так как "commentPost = models.ForeignKey", в связь добавится "authorUser"
         commentRat = self.authorUser.comment_set.aggregate(commentRating=Sum('rating'))
