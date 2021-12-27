@@ -79,13 +79,17 @@ class AppointmentView(View):
         # опять перейти на данную страницу make_appointment после return
 
 
-
+# если подчеркивается красным - ничего страшного, работать будет и так
 from newapp.models import Category
 
 class AppointView(View):
     def get(self, request, *args, **kwargs):
-        # subscriber = Category.objects.all().values('subscribers', 'name')
+        # формируем запрос из БЗ из модели Category и присваиваем его результаты переменной categorys
+        # запрос формируется следующим образом:
+        # _____________1________2______3______4_________5___________________6_______________7________________8
         categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
+        # 1-из модели Category (файл models.py приложения news_app) 2-взять объекты, значения(objects) 3-все(all())
+        # 4-по полям (либо столбикам, либо колонкам таблицы) на названиями 5, 6, 7, 8
         return render(request, 'test.html', {
-            'subs': categorys
+            'subs': categorys   # чтоб получить все значения из БД будем проходиться циклом в html страничке
         })

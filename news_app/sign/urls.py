@@ -3,7 +3,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from .views import BaseRegisterView
+from .views import BaseRegisterView, not_author
 from .views import become_author    # импорт для нашей кнопки проверки или добавления польз в группу премиум
 
 # Данные url перенаправляют пользователя в зависимости от его действий в плане регистрации, либо подгружают шаблон
@@ -23,5 +23,7 @@ urlpatterns = [
     path('signup/', BaseRegisterView.as_view(template_name='sign/signup.html'), name='signup'),
 
     path('become_author/', become_author, name='author'),  # для кнопки автор
+
+    path('not_author/', not_author, name='not_author'),  # для кнопки автор
 
 ]

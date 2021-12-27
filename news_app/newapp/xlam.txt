@@ -1,3 +1,10 @@
+{% if is_not_authors %}
+
+{% endif %}
+
+
+
+
 from .views.py
 # from datetime import datetime
 # from django.shortcuts import render
