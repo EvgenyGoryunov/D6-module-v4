@@ -12,11 +12,18 @@ from django.views.generic import TemplateView
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'protect/index.html'
 
-    # данная функция дает возможность добавлять в наше представление дополнительные отображения,например в нашем случае
+    # в общем в двух словах, как эта богодельня работает:
+    # мы создаем на нашей html страничке тег, например как в нашем случае (2) {% if is_not_authors %}_______{% endif %}
+    # помещаем вместо подчеркиваний какой-то код, например кнопку в нашем случае, и если выполняется условие (после
+    # равно (3-8)), то данный код появится на странице, если не выполняется условие, то код не появится, все просто
+
+    # данная функция дает возможность добавлять в наше представление дополнительные отображения, например в нашем случае
     # добавить отображение кнопки в зависимости от того, в какой группе находится наш пользователь, если он не автор
     # еще, то кнопку отображать, если он становится автором, то кнопку убрать
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)  # получаем весь контекст из класса-родителя
+        context = super().get_context_data(**kwargs)
+        context1 = super().get_context_data(**kwargs)
+        # получаем весь контекст из класса-родителя
         # добавили (1) новую контекстную переменную is_not_authors (2), чтобы ответить на вопрос, есть ли пользователь
         # в группе, мы заходим в переменную запроса self.request (4), из этой переменной мы можем вытащить текущего
         # пользователя, в поле groups хранятся все группы (5), в которых он состоит, далее применяем фильтр к этим
@@ -29,6 +36,21 @@ class IndexView(LoginRequiredMixin, TemplateView):
         # суть данного метода в том, чтоб убрать кнопку, когда пользователь находится в группе, если он не находится
         # то кнопка видимая остается
         # __1__________2____________3_______4_______________5_______6____________7_________8
-        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        if not self.request.user.groups.filter(name='authors').exists():
+            context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+            return context
+        if self.request.user.groups.filter(name='authors').exists():
+            context1['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+            return context1
+
+
+
+        # context['is_not_authors'] = self.request.user.groups.filter(name='authors').exists()
         #
-        return context
+        # return context
+
+
+    # def get_context_data_1(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+    #     return context

@@ -6,7 +6,7 @@
 {% block content %}
 
 <!--{{request.user.username}} вызов имени авторизованного пользователя-->
-<h2>Пользователь "{{request.user.username}}" - {% if is_not_authors %} НЕ {% endif %} АВТОР</h2>
+<h2>Пользователь "{{request.user.username}}" - статус {% if is_not_authors %} АВТОР {% endif %} {% if is_authors %} ПОЛЬЗОВАТЕЛЬ {% endif %}</h2>
 (шаблон templates\protect\index.html)
 <hr>
 <br>
@@ -23,8 +23,8 @@
 {% endif %}
 
 
-{% if is_not_authors %}
-<button><a href="sign/not_author/">Not автор!</a></button>
+{% if is_authors %}
+<button><a href="sign/not_author/">Хочу стать пользователем!</a></button>
 {% endif %}
 
 {% endblock %}
