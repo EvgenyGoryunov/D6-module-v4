@@ -12,7 +12,7 @@
 {% for post in posts %}
 <br>
 <br>
-<h3><a href="{% url 'news_detail' post.id %}"><u>{{ post }}</u></a> </h3> <!-- При нажатии на имя нас теперь будет перекидывать на страницу с самого товара -->
+<h3><a href="{% url 'news_detail' post.id %}"><u>{{ post }}</u></a> </h3> <!-- При нажатии на имя нас теперь будет перекидывать на страницу самого товара -->
 <br>
 <br>
 <h6>{{ post.text | truncatechars:250 }}</h6>

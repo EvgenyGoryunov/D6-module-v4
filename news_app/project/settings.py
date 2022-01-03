@@ -30,23 +30,24 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
-    # приложения для модуля Д4
+    # приложения для модуля Д4 (фильтры по словам)
     'newapp',
-    'django_filters',  # чтоб фильтра поддерживались нужно устанавливать
+    'django_filters',  # чтоб фильтра поддерживались
 
-    # приложения для модуля Д5
+    # приложения для модуля Д5 (регистрация, аутентификация пользователей)
     'sign',
     'protect',
 
-    # чтоб возможно было авторизоваться через сторонние сервисы, такие как гугл, мы устанавливаем
-    # дополнительный пакет pip install django-allauth
+    # чтоб возможно было авторизоваться через сторонние сервисы, такие как гугл, устанавливаем
+    # пакет pip install django-allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
-    # модуль Д6 (подписчики и рассылка писем)
+    # приложения для модуля Д6 (подписчики и рассылка писем по расписанию)
     'appointments',
+
 
 ]
 
@@ -68,7 +69,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # путь, где лежат нами созданные шаблоны
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # путь, где лежат нами созданные шаблоны по умолчанию
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -200,3 +201,8 @@ EMAIL_USE_SSL = True  # Яндекс использует ssl, включать 
 # # , 'Yandex', 'ges30087@list.ru'
 # ]
 SERVER_EMAIL = 'factoryskill@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
+
+
+
+
+

@@ -4,11 +4,35 @@
 
 
 {% block content %}
+
     <h2>Список всех фильмов</h2>
+    <button><a href="/appointment/appoint/">Test</a></button>
     <ul>
         {% for categorys in subs %}
-            <li> Category: {{ categorys.name }}; UserName: {{ categorys.subscribers__username }}; Email: {{ categorys.subscribers__email }} </li>
+            <li> Category: {{ categorys.name }}(id:{{ categorys.subscribers }}); UserName: {{ categorys.subscribers__username }}; Email: {{ categorys.subscribers__email }} </li>
         {% endfor%}
         <hr>
     </ul>
+
+
+<form method="post">
+    {% csrf_token %}
+    <label>ID</label>
+    <input type="text" name="id_pk">
+    <br>
+
+    <label>USer</label>
+    <input type="text" name="id_pk_id">
+    <br>
+
+
+    <!--кнопка отправки данных-->
+    <input type="submit" value="Продолжить">
+</form>
+
+
+
+
 {% endblock content %}
+
+
