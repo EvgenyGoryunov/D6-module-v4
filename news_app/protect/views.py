@@ -35,22 +35,10 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
         # суть данного метода в том, чтоб убрать кнопку, когда пользователь находится в группе, если он не находится
         # то кнопка видимая остается
-        # __1__________2____________3_______4_______________5_______6____________7_________8
+        # ________1__________2____________3_______4_______________5_______6____________7_________8
         if not self.request.user.groups.filter(name='authors').exists():
             context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
             return context
         if self.request.user.groups.filter(name='authors').exists():
             context1['is_authors'] = self.request.user.groups.filter(name='authors').exists()
             return context1
-
-
-
-        # context['is_not_authors'] = self.request.user.groups.filter(name='authors').exists()
-        #
-        # return context
-
-
-    # def get_context_data_1(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
-    #     return context

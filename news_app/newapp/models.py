@@ -67,7 +67,7 @@ class Category(models.Model):
 # Модель статьй и новостей
 class Post(models.Model):
     # связь «один ко многим» с моделью Author;
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор (author)')
 
     # поле с выбором — «статья» или «новость»;
     NEWS = 'NW'
@@ -76,18 +76,18 @@ class Post(models.Model):
         (NEWS, 'Новость'),
         (ARTICLE, 'Статья'),
     )
-    categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE)
+    categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE, verbose_name='Категория(categoryType)')
 
     # автоматически добавляемая дата и время создания;
-    dateCreation = models.DateTimeField(auto_now_add=True)
+    dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания(dateCreation)')
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, verbose_name='Категория(category)')
 
     # связь «многие ко многим» с моделью Category (с дополнительной моделью PostCategory);
     #    postCategory = models.ManyToManyField(Category, through='postCategory')
 
     # заголовок статьи/новости;
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128, verbose_name='Название(title)')
 
     # текст статьи/новости;
     text = models.TextField()

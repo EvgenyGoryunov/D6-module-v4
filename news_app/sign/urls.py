@@ -22,8 +22,8 @@ urlpatterns = [
     # полей при регистрации пользователя
     path('signup/', BaseRegisterView.as_view(template_name='sign/signup.html'), name='signup'),
 
-    path('become_author/', become_author, name='author'),  # для кнопки автор
+    path('become_author/', become_author, name='author'),  # для кнопки стать автор
 
-    path('not_author/', not_author, name='not_author'),  # для кнопки автор
+    path('not_author/', not_author, name='not_author'),  # для кнопки перестать быть автором
 
 ]

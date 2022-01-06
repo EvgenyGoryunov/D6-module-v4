@@ -1,3 +1,7 @@
+<hr>
+<button><a href="{% url 'add_subscribe' %}"><u>ПодПиска :)</u></a></button>
+
+
 {% if is_not_authors %}
 
 {% endif %}

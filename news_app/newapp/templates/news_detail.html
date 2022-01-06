@@ -11,17 +11,15 @@
 {{ post.text }}
 <br>
 <br>
-- новость №{{ post.pk }}; автор: {{ post.author }}; категория: {{ post.category }}({{ post.category.id }}) ;дата создания: {{ post.dateCreation }} -
+- новость №{{ post.pk }}; автор: {{ post.author }}; категория: {{ post.category }}(id:{{ post.category.id }}) ;(pk:{{ post.category.pk }}) ;дата создания: {{ post.dateCreation }} -
 <br>
 <br>
+<button><a href="add_subscribe/?pk={{ post.category.id }}">ПодПиска :)</a></button>
+<button><a href="del_subscribe/?pk={{ post.category.id }}">ОтПиска</a></button>
 
-<a href="{% url 'news_edit' post.id %}"><u>Подписаться</u></a>
-<a href="{% url 'news_edit' post.id %}"><u>Отписаться</u></a>
 <hr>
 <a href="{% url 'news_edit' post.id %}"><u>Редактировать</u></a>   <!--ссылка на редактирование товара-->
 <a href="{% url 'news_delete' post.id %}"><u>Удалить</u></a>   <!--ссылка на удаление товара-->
-
-
 
 <hr>
 

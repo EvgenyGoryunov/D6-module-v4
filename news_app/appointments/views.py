@@ -1,4 +1,7 @@
 from datetime import datetime
+
+from django.contrib.auth.decorators import login_required
+
 from django.core.mail import mail_admins
 from django.shortcuts import render, redirect
 from django.views import View
@@ -8,6 +11,7 @@ from newapp.models import Category
 
 
 class AppointView(View):
+
     def get(self, request, *args, **kwargs):
         categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
         return render(request, 'test.html', {
@@ -15,39 +19,52 @@ class AppointView(View):
         })
 
     def post(self, request):
+        # user = request.user
         appoint = Appoint(
             idpk=request.POST['id_pk'],
 
-            idpkid=request.POST['id_pk_id'],
+            idpkid=request.user,
         )
         appoint.save()
 
-
-
         return redirect('test')
 
+id_q=3
 
 
 
+# def add_subscribe_t(request, ):
+    # print('id_qid_qid_qid_qid_qid_q:')
+    # print(dir(request))
+    # print(request.GET.get())
+    # print(request.user)
+    # print(request.GET)
+    # Category.objects.get(pk=id_q).subscribers.add(request.user)
+    # return redirect('test')
+#
+
+
+# def del_subscribe_t(request, ):
+    # print('del_subscribe_t:', id_q)
+    # Category.objects.get(pk=id_q).subscribers.remove(request.user)
+    # return redirect('test')
 
 
 
+    #
+    #    print('user:', user)
+    #    print('category_group:', category_group)
 
+    # From Timofei
+    # def add_subscribe(request, pk):
+    #     user = request.user
+    #     category_object = PostCategory.objects.get(postThrough=pk)
+    #     category_object_name = category_object.categoryThrough
+    # Где postThrough и categoryThrough - названия полей в PostCategory
 
-
-
-
-
-        # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
-        # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
-        # categorys = Category.objects.get(pk=2).name
-
-
-
-
-
-
-
+    # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
+    # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
+    # categorys = Category.objects.get(pk=2).name
 
 
 # # template_name = 'test.html'
@@ -59,14 +76,6 @@ class AppointView(View):
 #         'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
 #     })
 
-
-#
-#
-#
-#
-#
-#
-#
 #
 #
 #
@@ -74,11 +83,11 @@ class AppointView(View):
 # обрабатывает запрос и сохраняет новые объекты в БД (models.py)
 class AppointmentView(View):
     # получаем шаблон для ввода данных (make_appointment.html)
-    def get(self, request, *args, **kwargs):
+    def get(self, request, ):
         return render(request, 'make_appointment.html', {})
 
     # отправляем на сервер нашу информацию и сохраняем ее в БД (сохраняем новый объект класса)
-    def post(self, request, *args, **kwargs):
+    def post(self, request, ):
         appointment = Appointment(
             date=datetime.strptime(request.POST['date'], '%Y-%m-%d'),
             client_name=request.POST['client_name'],
@@ -94,10 +103,6 @@ class AppointmentView(View):
 
         # переход на данную форму после выполнения кода
         return redirect('make_appointment')  # (1)
-
-
-
-
 
     #
     # def post (self, request, *args, **kwargs):

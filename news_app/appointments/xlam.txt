@@ -1,3 +1,14 @@
+<button><a href="{% url 'add_subscribe' post.category.id  %}"><u>ПодПиска :)</u></a></button>
+
+<button><a href="{% url 'add_subscribe' post.category.id  %}"><u>ПодПиска :)</u></a></button>
+
+
+button><a href="{% url 'add_subscribe' post.category.id %}"><u>ПодПиска :)</u></a></button>
+<button><a href="{% url 'add_subscribe' post.id %}"><u>ПодПиска :)</u></a></button>
+
+<button><a href="{% url 'add_subscribe_t' %}"><u>ПодПиска :)</u></a></button>
+<button><a href="{% url 'del_subscribe_t' %}"><u>ОтПиска</u></a></button>
+
 
 <form method="post" action="{% url 'appointments:make_appointment' %}">
     {% csrf_token %}

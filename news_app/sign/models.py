@@ -4,6 +4,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+# импортировали класс формы, который предоставляет allauth
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
+
 
 # форма, с помощью которой мы будем создавать нового пользователя
 # представлений реализуем Create-дженерик, расширим стандартную форму, добавив другие значимые поля:
@@ -24,11 +28,6 @@ class BaseRegisterForm(UserCreationForm):
                   "email",
                   "password1",
                   "password2")
-
-
-# импортировали класс формы, который предоставляет allauth
-from allauth.account.forms import SignupForm
-from django.contrib.auth.models import Group
 
 
 #  В общем с приложения allauth.account.forms взяли форму SignupForm (базовая, стандартная форма), но в итоге сделаем
