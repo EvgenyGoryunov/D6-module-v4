@@ -14,8 +14,15 @@
 - новость №{{ post.pk }}; автор: {{ post.author }}; категория: {{ post.category }}(id:{{ post.category.id }}) ;(pk:{{ post.category.pk }}) ;дата создания: {{ post.dateCreation }} -
 <br>
 <br>
+
+{% if is_not_subscribe %}
 <button><a href="add_subscribe/?pk={{ post.category.id }}">ПодПиска :)</a></button>
-<button><a href="del_subscribe/?pk={{ post.category.id }}">ОтПиска</a></button>
+{% endif %}
+
+{% if is_subscribe %}
+<button><a href="del_subscribe/?pk={{ post.category.id }}">ОтПиска :)</a></button>
+{% endif %}
+
 
 <hr>
 <a href="{% url 'news_edit' post.id %}"><u>Редактировать</u></a>   <!--ссылка на редактирование товара-->
