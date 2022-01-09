@@ -21,14 +21,13 @@ class Author(models.Model):
         # мы суммируем поле 'rating' класс Post
         postRat = self.post_set.aggregate(postRating=Sum('rating'))
         pRat = 0
-        pRat += postRat.get('postRating')
-
+        pRat += postRat.get('postRating', )
 
         # для комментов суммирование рейтинга, мы суммируем поле 'rating' класс Comment
         # так как "commentPost = models.ForeignKey", в связь добавится "authorUser"
         commentRat = self.authorUser.comment_set.aggregate(commentRating=Sum('rating'))
         cRat = 0
-        cRat += commentRat.get('commentRating')
+        cRat += commentRat.get('commentRating', )
 
         # складываем две переменные, рейтинг за статью (посты), и рейтинг за комменты
         self.ratingAuthor = pRat * 3 + cRat
@@ -67,7 +66,7 @@ class Category(models.Model):
 # Модель статьй и новостей
 class Post(models.Model):
     # связь «один ко многим» с моделью Author;
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор (author)')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, default="John", verbose_name='Автор (author)')
 
     # поле с выбором — «статья» или «новость»;
     NEWS = 'NW'
@@ -76,15 +75,14 @@ class Post(models.Model):
         (NEWS, 'Новость'),
         (ARTICLE, 'Статья'),
     )
-    categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE, verbose_name='Категория(categoryType)')
+    categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE,
+                                    verbose_name='Категория(categoryType)')
 
     # автоматически добавляемая дата и время создания;
     dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания(dateCreation)')
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, verbose_name='Категория(category)')
-
-    # связь «многие ко многим» с моделью Category (с дополнительной моделью PostCategory);
-    #    postCategory = models.ManyToManyField(Category, through='postCategory')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, default="Nature",
+                                 verbose_name='Категория(category)')
 
     # заголовок статьи/новости;
     title = models.CharField(max_length=128, verbose_name='Название(title)')
@@ -151,6 +149,10 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.commentUser}: {self.text[:20]}'
 
+#
+#
+#
+#
 # Осталось с прошлой жизни код, храню на всякий случай
 
 # Промежуточная модель для связи «многие ко многим»:
@@ -161,3 +163,6 @@ class Comment(models.Model):
 
 # связь «один ко многим» с моделью Category.
 #    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+# связь «многие ко многим» с моделью Category (с дополнительной моделью PostCategory);
+#    postCategory = models.ManyToManyField(Category, through='postCategory')

@@ -2,7 +2,6 @@
 
 {% block title %} The Best News: {{ post }} {% endblock title %}
 
-
 {% block content %}
 
 <br>
@@ -11,11 +10,13 @@
 {{ post.text }}
 <br>
 <br>
-- новость №{{ post.pk }}; автор: {{ post.author }}; категория: {{ post.category }}(id:{{ post.category.id }}) ;(pk:{{ post.category.pk }}) ;дата создания: {{ post.dateCreation }} -
+-= новость №{{ post.pk }}; автор: {{ post.author }}; категория: {{ post.category }}(id:{{ post.category.id }}); дата создания: {{ post.dateCreation }} =-
 <br>
 <br>
 
 {% if is_not_subscribe %}
+<!--запрос, который отправляется в наше представление, для того, чтоб мы могли использовать значение категории
+переменная post.category.id-->
 <button><a href="add_subscribe/?pk={{ post.category.id }}">ПодПиска :)</a></button>
 {% endif %}
 
@@ -23,11 +24,9 @@
 <button><a href="del_subscribe/?pk={{ post.category.id }}">ОтПиска :)</a></button>
 {% endif %}
 
-
 <hr>
 <a href="{% url 'news_edit' post.id %}"><u>Редактировать</u></a>   <!--ссылка на редактирование товара-->
 <a href="{% url 'news_delete' post.id %}"><u>Удалить</u></a>   <!--ссылка на удаление товара-->
-
 <hr>
 
 {% endblock content %}

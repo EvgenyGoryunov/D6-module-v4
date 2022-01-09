@@ -1,14 +1,14 @@
 from django.urls import path, include
 
 
-from .views import NewsList, NewsDetailView, NewsSearch, AddNews, ChangeNews, DeleteNews, add_subscribe, \
+from .views import NewsList, NewsDetail, NewsSearch, AddNews, ChangeNews, DeleteNews, add_subscribe, \
     del_subscribe
 
 urlpatterns = [
 
     # модуль Д4 - вывод инфы из БД, создание новостей, редактирование, удаление и прочее
     path('', NewsList.as_view()),
-    path('<int:pk>/', NewsDetailView.as_view(), name='news_detail'),  # Ссылка на детали новости
+    path('<int:pk>/', NewsDetail.as_view(), name='news_detail'),  # Ссылка на детали новости
     path('search/', NewsSearch.as_view(), name='news_search'),
 
     # модуль Д5 - регистрация пользователей, ограничение прав доступа к сайту (1)

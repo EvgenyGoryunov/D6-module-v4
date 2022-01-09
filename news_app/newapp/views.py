@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin  # модуль Д5, чтоб ограничить права доступа
-from django.shortcuts import redirect
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 
 from .filters import NewsFilter  # фильтр (с файла filters.py)
@@ -41,7 +43,7 @@ class NewsSearch(ListView):
 
 
 # дженерик для получения деталей о посте
-class NewsDetailView(DetailView):
+class NewsDetail(DetailView):
     template_name = 'news_detail.html'
     queryset = Post.objects.all()
 
@@ -59,18 +61,134 @@ class NewsDetailView(DetailView):
         return context
 
 
-# дженерик для создания объекта. Надо указать только имя шаблона и класс формы
-class NewsAddView(CreateView):
+# дженерик для создания объекта. Можно указать только имя шаблона и класс формы
+class NewsAdd(CreateView):
     template_name = 'news_add.html'
     form_class = NewsForm
-    success_url = '/news/'
+
+    def post(self, request, *args, **kwargs):
+        form = NewsForm(request.POST)
+        # category_pk = request.POST['category'] # либо так можно, либо как ниже
+        category_pk = request.POST.get('category')
+        sub_text = request.POST.get('text')
+        sub_title = request.POST.get('title')
+        category = Category.objects.get(pk=category_pk)
+        subscribers = list(category.subscribers.all())
+
+        # валидатор (не нужен в данном случае)
+        # if form.is_valid():
+        #     news = form.save(commit=False)
+        #     news.save()
+        #     print('news:', news)
+
+
+        for subscriber in subscribers:
+            print('x:', subscriber.email)
+
+            # Отправка HTML
+            html_content = render_to_string(
+                'mail.html', {
+                    'user': subscriber,
+                    'text': sub_text[:50],
+                    # 'post': post,
+                }
+            )
+
+            msg = EmailMultiAlternatives(
+                subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем любимом разделе!',  #
+                body=f'{sub_text[:50]}',   #
+                # from_email='pozvizdd@yandex.ru',   #
+                # to=[subscriber.email, 'olegmodenov@gmail.com'],  #
+            )
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+
+
+
+
+
+        # if form.is_valid():
+        #     post = form.save(commit=False)
+        #     post.author = self.request.user.author
+        #     post.save()
+        #     print(post)
+        #
+        #     # Рассылка почты
+        #     for subscriber in subscribers:
+        #         print(subscriber.email)
+        #         if subscriber.email:
+        #             print(f'нашли юзера, отправляем ему на емаил. {subscriber.email}')
+        #
+        #             # Отправка HTML
+        #             html_content = render_to_string(
+        #                 'mail.html', {
+        #                     'user': subscriber,
+        #                     'text': client_text[:50],
+        #                     'post': post,
+        #                 }
+        #             )
+        #             msg = EmailMultiAlternatives(
+        #                 subject=f'Здравствуй, {subscriber.username}. Новая статья в твоём любимом разделе!',
+        #                 body=f'{client_text[:50]}',
+        #                 from_email='pozvizdd@yandex.ru',
+        #                 to=[subscriber.email, 'olegmodenov@gmail.com'],
+        #             )
+        #             msg.attach_alternative(html_content, "text/html")
+        #             msg.send()
+        #
+        #             # # Отправка простого текста
+        #             # send_mail(
+        #             #     subject=f'{subscriber.email}',
+        #             #     message=f'Появился новый пост!\n {client_title}: {client_text[:50]}. \n Ссылка на статью: ',
+        #             #     from_email='pozvizdd@yandex.ru',
+        #             #     recipient_list=[subscriber.email, 'olegmodenov@gmail.com'],
+        #     return redirect(post)
+        #
+        # return NewsForm(request, 'news/news_add.html', {'form': form})
+
+
+        return redirect('/news/')
+
+
+
+
+
+
+# print('user:', x.name, ', x.email:', x.email, ', x.id:', x.id,)
+# print("category:", category)
+# subscribers = list(category.subscribers.all().values("email"))
+# print('subscribers:', subscribers)
+# print('subscribers_type:', type(subscribers))
+# print('x:', dir(subscribers))
+
+        #
+        #
+        #
+        #
+        # print(request.POST)
+        # print(request.POST.get('category'))
+        # print("xxxx", x)
+        # print("cat", cat)
+
+    # def get(self, request, **kwargs):
+    #     return render(request, 'news_list.html', {context})
+    # return render(request, 'news_list.html', {context})
+
+    # def get(self, request, *args, **kwargs):
+    #     self.object = None
+    #     return super().get(request, *args, **kwargs)
+    #
+    # def post(self, request, *args, **kwargs):
+    #     self.object = None
+    #     return super().post(request, *args, **kwargs)
 
 
 # дженерик для редактирования объекта
-class NewsEditView(UpdateView):
+class NewsEdit(UpdateView):
     template_name = 'news_edit.html'
     form_class = NewsForm
-    success_url = '/news/'  # после редактирования статьи перейдем по указанному адресу, то есть на главную
+    success_url = '/news/'  # после редактирования статьи перейдем по указанному адресу (на главную)
 
     def get_object(self, **kwargs):  # (4)
         id = self.kwargs.get('pk')
@@ -78,22 +196,16 @@ class NewsEditView(UpdateView):
 
 
 # дженерик для удаления новости
-class NewsDeleteView(DeleteView):
+class NewsDelete(DeleteView):
     template_name = 'news_delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'  # после удаления нашей статьи перейдем по указанному адресу
 
 
-# функция подписки пользователя на категорию новости, которую в данный момент читает пользователь
-# передаем с нашей странички news_detail.html на которой находится пользователь (представление DetailView)
-# через GET запрос информацию в виде значения переменной ?pk={{ post.category.id }}, далее из объекта request
-# через метод GET.get('pk') выдираем ее значение (число) и используем для поиска в модели категории нужной
-# категории. С помощью метода add(request.user) добаляем нового пользователя в поле подписоты subscribers на
-# рассылку, добавляется связь многие-ко-многим в промежуточной таблице category_subscribers
-# (содержит ид записи, ид категории, ид юзера)
+# (5)
 @login_required
 def add_subscribe(request, **kwargs):
-    pk = request.GET.get('pk')
+    pk = request.GET.get('pk', )
     Category.objects.get(pk=pk).subscribers.add(request.user)
     return redirect('/news/')
 
@@ -101,26 +213,43 @@ def add_subscribe(request, **kwargs):
 # функция отписки от группы
 @login_required
 def del_subscribe(request, **kwargs):
-    pk = request.GET.get('pk')
+    pk = request.GET.get('pk', )
     Category.objects.get(pk=pk).subscribers.remove(request.user)
     return redirect('/news/')
 
 
 # Модуль Д5 - Ограничения прав доступа
 # (1)
-class AddNews(PermissionRequiredMixin, NewsAddView):
+class AddNews(PermissionRequiredMixin, NewsAdd):
     permission_required = ('newapp.add_post',)
 
 
-class ChangeNews(PermissionRequiredMixin, NewsEditView):
+class ChangeNews(PermissionRequiredMixin, NewsEdit):
     permission_required = ('newapp.change_post',)
 
 
-class DeleteNews(PermissionRequiredMixin, NewsDeleteView):
+class DeleteNews(PermissionRequiredMixin, NewsDelete):
     permission_required = ('newapp.delete_post',)
 
-
+# (5)
+# функция подписки пользователя на категорию новости, которую в данный момент читает пользователь
+# передаем с нашей странички news_detail.html на которой находится пользователь (представление DetailView)
+# через GET запрос информацию в виде значения переменной ?pk={{ post.category.id }}, далее из объекта request
+# через метод GET.get('pk') выдираем ее значение (число) и используем для поиска в модели категории нужной
+# категории. С помощью метода add(request.user) добавляем нового пользователя в поле подписоты subscribers на
+# рассылку, добавляется связь многие-ко-многим в промежуточной таблице category_subscribers
+# (содержит ид записи, ид категории, ид юзера)
+# (4)
+# метод get_object используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся
 #
+# (3)
+# это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку
+# объектов через HTML-шаблон
+#
+# (2)
+# указываем модель, объекты которой мы будем выводить
+# указываем имя шаблона, в котором будет лежать HTML, в котором будут все инструкции о том, как именно
+# пользователю должны вывестись наши объекты
 #
 # (1)
 # через запятую указываем какие права хотим ограничить, предварительно в админ панели создали необходимые ограничения,
@@ -129,17 +258,7 @@ class DeleteNews(PermissionRequiredMixin, NewsDeleteView):
 # Существует определенное соглашение для именования разрешений: <app>.<action>_<model>, пример 'newapp.add_post'
 # После того, как мы написали наши ограничения, нужно в urls изменить выводы преставлений, указав на новые
 #
-# (2)
-# указываем модель, объекты которой мы будем выводить
-# указываем имя шаблона, в котором будет лежать HTML, в котором будут все инструкции о том, как именно
-# пользователю должны вывестись наши объекты
 #
-# (3)
-# это имя списка, в котором будут лежать все объекты, его надо указать, чтобы обратиться к самому списку
-# объектов через HTML-шаблон
-#
-# (4)
-# метод get_object используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся
 #
 #
 #

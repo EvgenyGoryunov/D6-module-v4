@@ -1,86 +1,15 @@
 from datetime import datetime
-
 from django.contrib.auth.decorators import login_required
-
 from django.core.mail import mail_admins
 from django.shortcuts import render, redirect
 from django.views import View
-
 from .models import Appointment, Appoint
 from newapp.models import Category
 
 
-class AppointView(View):
-
-    def get(self, request, *args, **kwargs):
-        categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
-        return render(request, 'test.html', {
-            'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
-        })
-
-    def post(self, request):
-        # user = request.user
-        appoint = Appoint(
-            idpk=request.POST['id_pk'],
-
-            idpkid=request.user,
-        )
-        appoint.save()
-
-        return redirect('test')
-
-id_q=3
 
 
 
-# def add_subscribe_t(request, ):
-    # print('id_qid_qid_qid_qid_qid_q:')
-    # print(dir(request))
-    # print(request.GET.get())
-    # print(request.user)
-    # print(request.GET)
-    # Category.objects.get(pk=id_q).subscribers.add(request.user)
-    # return redirect('test')
-#
-
-
-# def del_subscribe_t(request, ):
-    # print('del_subscribe_t:', id_q)
-    # Category.objects.get(pk=id_q).subscribers.remove(request.user)
-    # return redirect('test')
-
-
-
-    #
-    #    print('user:', user)
-    #    print('category_group:', category_group)
-
-    # From Timofei
-    # def add_subscribe(request, pk):
-    #     user = request.user
-    #     category_object = PostCategory.objects.get(postThrough=pk)
-    #     category_object_name = category_object.categoryThrough
-    # Где postThrough и categoryThrough - названия полей в PostCategory
-
-    # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
-    # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
-    # categorys = Category.objects.get(pk=2).name
-
-
-# # template_name = 'test.html'
-
-#
-
-#
-#     return render(request, 'test.html', {
-#         'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
-#     })
-
-#
-#
-#
-#
-# обрабатывает запрос и сохраняет новые объекты в БД (models.py)
 class AppointmentView(View):
     # получаем шаблон для ввода данных (make_appointment.html)
     def get(self, request, ):
@@ -136,8 +65,6 @@ class AppointmentView(View):
 # отправляем письмо всем админам по аналогии с send_mail, только здесь получателя указывать не надо, его
 # автоматом возьмем из базы данных пользователей со статусом админ, либо другим, кого укажем, нужно добавить
 # настройки в сеттинги проекта
-#
-# если подчеркивается красным - ничего страшного, работать будет и так
 
 
 # блок для отправки писем из базы данных любому адресату
@@ -146,7 +73,7 @@ class AppointmentView(View):
 # сообщение содержащее краткую суть проблемы и в заключении добавить дату записи. И всё это отправлялось на
 # почту любому адресату
 
-# Автоотправка сообщений, пока временно оключено, чтоб другой способ проверить (ниже) - отправка шаблона
+# Автоотправка сообщений, пока временно оключено, чтоб другой способ проверить - отправка шаблона
 # send_mail(
 #     subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
 #     # имя клиента и дата записи будут в теме для удобства
@@ -182,3 +109,25 @@ class AppointmentView(View):
 # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
 # 1-из модели Category (файл models.py приложения news_app) 2-взять объекты, значения(objects) 3-все(all())
 # 4-по полям (либо столбикам, либо колонкам таблицы) по названиям 5, 6, 7, 8
+#
+#
+#
+# мои тесты
+# class AppointView(View):
+#
+#     def get(self, request, *args, **kwargs):
+#         categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
+#         return render(request, 'test.html', {
+#             'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
+#         })
+#     #
+#     def post(self, request):
+#         # user = request.user
+#         appoint = Appoint(
+#             idpk=request.POST['id_pk'],
+#
+#             idpkid=request.user,
+#         )
+#         appoint.save()
+#
+#         return redirect('test')
