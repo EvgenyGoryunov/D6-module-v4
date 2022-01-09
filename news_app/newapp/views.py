@@ -73,40 +73,31 @@ class NewsAdd(CreateView):
         sub_text = request.POST.get('text')
         sub_title = request.POST.get('title')
         category = Category.objects.get(pk=category_pk)
-        subscribers = list(category.subscribers.all())
+        subscribers = category.subscribers.all()
 
-        # валидатор (не нужен в данном случае)
-        # if form.is_valid():
-        #     news = form.save(commit=False)
-        #     news.save()
-        #     print('news:', news)
-
+        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода
+        if form.is_valid():
+            news = form.save(commit=False)
+            news.save()
+            print('news:', news)
 
         for subscriber in subscribers:
             print('x:', subscriber.email)
 
-            # Отправка HTML
+            # Отправка HTML с шаблоном внутри
             html_content = render_to_string(
-                'mail.html', {
-                    'user': subscriber,
-                    'text': sub_text[:50],
-                    # 'post': post,
-                }
-            )
-
+                'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news})
+            #
             msg = EmailMultiAlternatives(
                 subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем любимом разделе!',  #
-                body=f'{sub_text[:50]}',   #
-                # from_email='pozvizdd@yandex.ru',   #
-                # to=[subscriber.email, 'olegmodenov@gmail.com'],  #
+                body=f'{sub_text[:50]}',  #
+                from_email='factoryskill@yandex.ru',   #
+                to=[subscriber.email, 'ges300487@yandex.ru'],  #
             )
             msg.attach_alternative(html_content, "text/html")
             msg.send()
 
-
-
-
-
+        return redirect('/news/')
 
         # if form.is_valid():
         #     post = form.save(commit=False)
@@ -148,13 +139,6 @@ class NewsAdd(CreateView):
         # return NewsForm(request, 'news/news_add.html', {'form': form})
 
 
-        return redirect('/news/')
-
-
-
-
-
-
 # print('user:', x.name, ', x.email:', x.email, ', x.id:', x.id,)
 # print("category:", category)
 # subscribers = list(category.subscribers.all().values("email"))
@@ -162,26 +146,26 @@ class NewsAdd(CreateView):
 # print('subscribers_type:', type(subscribers))
 # print('x:', dir(subscribers))
 
-        #
-        #
-        #
-        #
-        # print(request.POST)
-        # print(request.POST.get('category'))
-        # print("xxxx", x)
-        # print("cat", cat)
+#
+#
+#
+#
+# print(request.POST)
+# print(request.POST.get('category'))
+# print("xxxx", x)
+# print("cat", cat)
 
-    # def get(self, request, **kwargs):
-    #     return render(request, 'news_list.html', {context})
-    # return render(request, 'news_list.html', {context})
+# def get(self, request, **kwargs):
+#     return render(request, 'news_list.html', {context})
+# return render(request, 'news_list.html', {context})
 
-    # def get(self, request, *args, **kwargs):
-    #     self.object = None
-    #     return super().get(request, *args, **kwargs)
-    #
-    # def post(self, request, *args, **kwargs):
-    #     self.object = None
-    #     return super().post(request, *args, **kwargs)
+# def get(self, request, *args, **kwargs):
+#     self.object = None
+#     return super().get(request, *args, **kwargs)
+#
+# def post(self, request, *args, **kwargs):
+#     self.object = None
+#     return super().post(request, *args, **kwargs)
 
 
 # дженерик для редактирования объекта
