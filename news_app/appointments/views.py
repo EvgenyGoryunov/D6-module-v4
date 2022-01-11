@@ -1,13 +1,9 @@
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
-from django.core.mail import mail_admins
+
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Appointment, Appoint
-from newapp.models import Category
 
-
-
+from .models import Appointment
 
 
 class AppointmentView(View):
@@ -22,32 +18,20 @@ class AppointmentView(View):
             client_name=request.POST['client_name'],
             message=request.POST['message'],
         )
+
+        # print("НЕ ТОТ МЕТОД СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         appointment.save()
 
         # отправка сообщений в указанном формате
-        mail_admins(  # (2)
-            subject=f'{appointment.client_name} {appointment.date.strftime("%d %m %Y")}',
-            message=appointment.message,
-        )
+        # mail_admins(  # (2)
+        # subject=f'{appointment.client_name} {appointment.date.strftime("%d %m %Y")}',
+        # message=appointment.message,
+        # )
 
         # переход на данную форму после выполнения кода
         return redirect('make_appointment')  # (1)
-
-    #
-    # def post (self, request, *args, **kwargs):
-    #     # print(request.GET)
-    #
-    # def get_object(self, **kwargs):  # (4)
-    #     id = self.kwargs.get('pk')
-    #     return Category.objects.get(pk=id)
-
-    #     def get_object(self, **kwargs):  # (4)
-    #         id = self.kwargs.get('pk')
-    #         return Category.objects.get(pk=id)
-    #
-    #     # print(Category.objects.get(pk=id))
-    #
-    #     return redirect('test')
+#
+#
 #
 #
 #

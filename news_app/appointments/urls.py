@@ -1,5 +1,6 @@
-from django.urls import path, include
-from .views import AppointmentView# , AppointView, add_subscribe_t, del_subscribe_t
+from django.urls import path
+
+from .views import AppointmentView  # , AppointView, add_subscribe_t, del_subscribe_t
 
 urlpatterns = [
 
@@ -8,13 +9,13 @@ urlpatterns = [
     path('', AppointmentView.as_view(), name='make_appointment'),
 
 ]
-
-
-
-
-
+#
+#
+#
+#
+#
 # path('appoint/', AppointView.as_view(), name='test'),
-
+#
 # модуль Д6 - подписка на рассылку на статью
 # path('add_subscribe_t/', add_subscribe_t, name='add_subscribe_t'),
 # path('del_subscribe_t/', del_subscribe_t, name='del_subscribe_t'),

@@ -79,7 +79,7 @@ class NewsAdd(CreateView):
         host = request.META.get('HTTP_HOST')
 
 
-        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода от хакеров и прочее
+        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода от хакеров и прочего
         if form.is_valid():
             news = form.save(commit=False)
             news.save()
@@ -109,7 +109,6 @@ class NewsAdd(CreateView):
             msg.send()
 
         return redirect('/news/')
-
 
 
 # дженерик для редактирования объекта
