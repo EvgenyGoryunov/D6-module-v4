@@ -6,8 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1> Новая статья от {{ user.username }} </h1>
+    <h1> Новая статья от автора {{ post.author }} из категории {{ post.category }}</h1>
     <p> {{ text }} </p>
-    <p><a href="{{ post.get_absolute_url }}"></a></p>
+
+    <p><a href="http://{{ host }}{{ post.get_absolute_url }}">Перейти на статью</a></p>
+
 </body>
 </html>

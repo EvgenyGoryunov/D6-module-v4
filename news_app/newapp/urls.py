@@ -7,7 +7,7 @@ from .views import NewsList, NewsDetail, NewsSearch, AddNews, ChangeNews, Delete
 urlpatterns = [
 
     # модуль Д4 - вывод инфы из БД, создание новостей, редактирование, удаление и прочее
-    path('', NewsList.as_view()),
+    path('', NewsList.as_view(), name='news'),
     path('<int:pk>/', NewsDetail.as_view(), name='news_detail'),  # Ссылка на детали новости
     path('search/', NewsSearch.as_view(), name='news_search'),
 

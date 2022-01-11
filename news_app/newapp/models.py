@@ -112,9 +112,8 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title}'
 
-    # абсолютный путь, чтобы после создания нас перебрасывало на страницу с новостями
     def get_absolute_url(self):
-        return f'/news/{self.id}'
+        return reverse('news_detail', kwargs={'pk': self.id})
 
 
 # Под каждой новостью/статьей можно оставлять комментарии, поэтому

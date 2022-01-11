@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin  # модуль Д5, чтоб ограничить права доступа
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 
@@ -47,7 +47,7 @@ class NewsDetail(DetailView):
     template_name = 'news_detail.html'
     queryset = Post.objects.all()
 
-    # для отображения кнопок подписки (если не подписан - кнопка подписка видима, и наоборот)
+    # для отображения кнопок подписки (если не подписан: кнопка подписки - видима, и наоборот)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # общаемся к содержимому контекста нашего представления
         id = self.kwargs.get('pk')  # получаем ИД поста (выдергиваем из нашего объекта из модели Пост)
@@ -74,98 +74,42 @@ class NewsAdd(CreateView):
         sub_title = request.POST.get('title')
         category = Category.objects.get(pk=category_pk)
         subscribers = category.subscribers.all()
+        # получаем адрес хоста и порта (в нашем случае 127.0.0.1:8000), чтоб в дальнейшем указать его в ссылке
+        # в письме, чтоб пользователь мог с письма переходить на наш сайт, на конкретную новость
+        host = request.META.get('HTTP_HOST')
 
-        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода
+
+        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода от хакеров и прочее
         if form.is_valid():
             news = form.save(commit=False)
             news.save()
-            print('news:', news)
+            print('Статья:', news)
 
         for subscriber in subscribers:
-            print('x:', subscriber.email)
+            print('Адреса рассылки:', subscriber.email)
 
-            # Отправка HTML с шаблоном внутри
+            # (6)
             html_content = render_to_string(
-                'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news})
-            #
+                'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news, 'host': host})
+
+            # (7)
             msg = EmailMultiAlternatives(
-                subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем любимом разделе!',  #
-                body=f'{sub_text[:50]}',  #
-                from_email='factoryskill@yandex.ru',   #
-                to=[subscriber.email, 'ges300487@yandex.ru'],  #
+                # Заголовок письма, тема письма
+                subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем разделе!',
+                # Наполнение письма
+                body=f'{sub_text[:50]}',
+                # От кого письмо (должно совпадать с реальным адресом почты)
+                from_email='factoryskill@yandex.ru',
+                # Кому отправлять, конкретные адреса рассылки, берем из переменной, либо можно явно прописать
+                to=[subscriber.email],
             )
+
             msg.attach_alternative(html_content, "text/html")
+            print(html_content)
             msg.send()
 
         return redirect('/news/')
 
-        # if form.is_valid():
-        #     post = form.save(commit=False)
-        #     post.author = self.request.user.author
-        #     post.save()
-        #     print(post)
-        #
-        #     # Рассылка почты
-        #     for subscriber in subscribers:
-        #         print(subscriber.email)
-        #         if subscriber.email:
-        #             print(f'нашли юзера, отправляем ему на емаил. {subscriber.email}')
-        #
-        #             # Отправка HTML
-        #             html_content = render_to_string(
-        #                 'mail.html', {
-        #                     'user': subscriber,
-        #                     'text': client_text[:50],
-        #                     'post': post,
-        #                 }
-        #             )
-        #             msg = EmailMultiAlternatives(
-        #                 subject=f'Здравствуй, {subscriber.username}. Новая статья в твоём любимом разделе!',
-        #                 body=f'{client_text[:50]}',
-        #                 from_email='pozvizdd@yandex.ru',
-        #                 to=[subscriber.email, 'olegmodenov@gmail.com'],
-        #             )
-        #             msg.attach_alternative(html_content, "text/html")
-        #             msg.send()
-        #
-        #             # # Отправка простого текста
-        #             # send_mail(
-        #             #     subject=f'{subscriber.email}',
-        #             #     message=f'Появился новый пост!\n {client_title}: {client_text[:50]}. \n Ссылка на статью: ',
-        #             #     from_email='pozvizdd@yandex.ru',
-        #             #     recipient_list=[subscriber.email, 'olegmodenov@gmail.com'],
-        #     return redirect(post)
-        #
-        # return NewsForm(request, 'news/news_add.html', {'form': form})
-
-
-# print('user:', x.name, ', x.email:', x.email, ', x.id:', x.id,)
-# print("category:", category)
-# subscribers = list(category.subscribers.all().values("email"))
-# print('subscribers:', subscribers)
-# print('subscribers_type:', type(subscribers))
-# print('x:', dir(subscribers))
-
-#
-#
-#
-#
-# print(request.POST)
-# print(request.POST.get('category'))
-# print("xxxx", x)
-# print("cat", cat)
-
-# def get(self, request, **kwargs):
-#     return render(request, 'news_list.html', {context})
-# return render(request, 'news_list.html', {context})
-
-# def get(self, request, *args, **kwargs):
-#     self.object = None
-#     return super().get(request, *args, **kwargs)
-#
-# def post(self, request, *args, **kwargs):
-#     self.object = None
-#     return super().post(request, *args, **kwargs)
 
 
 # дженерик для редактирования объекта
@@ -214,7 +158,22 @@ class ChangeNews(PermissionRequiredMixin, NewsEdit):
 
 class DeleteNews(PermissionRequiredMixin, NewsDelete):
     permission_required = ('newapp.delete_post',)
-
+#
+#
+#
+#
+#
+# (7)
+# способ отправки писем с разным содержимым, то есть по мимо текста можно отправить например
+# готовую страницу html (шаблон с готовым содержимым как в нашем случае)
+#
+# (6)
+# все что касается отправки писем в Django читать здесь
+# https://www.djbook.ru/rel3.0/topics/email.html#mail-admins
+# Отправка письма с шаблоном внутри
+# Здесь указываем имя нашего шаблона, и что будет в нашем шаблона, то есть передаем все наши переменные
+# и их значения в наш шаблон, если не указать явно их, то будут пустые строчки
+#
 # (5)
 # функция подписки пользователя на категорию новости, которую в данный момент читает пользователь
 # передаем с нашей странички news_detail.html на которой находится пользователь (представление DetailView)
@@ -223,6 +182,7 @@ class DeleteNews(PermissionRequiredMixin, NewsDelete):
 # категории. С помощью метода add(request.user) добавляем нового пользователя в поле подписоты subscribers на
 # рассылку, добавляется связь многие-ко-многим в промежуточной таблице category_subscribers
 # (содержит ид записи, ид категории, ид юзера)
+#
 # (4)
 # метод get_object используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся
 #
@@ -247,6 +207,32 @@ class DeleteNews(PermissionRequiredMixin, NewsDelete):
 #
 #
 #
+#
+# print('user:', x.name, ', x.email:', x.email, ', x.id:', x.id,)
+# print("category:", category)
+# subscribers = list(category.subscribers.all().values("email"))
+# print('subscribers:', subscribers)
+# print('subscribers_type:', type(subscribers))
+# print('x:', dir(subscribers))
+#
+#
+#
+# print(request.POST)
+# print(request.POST.get('category'))
+# print("xxxx", x)
+# print("cat", cat)
+#
+# def get(self, request, **kwargs):
+#     return render(request, 'news_list.html', {context})
+# return render(request, 'news_list.html', {context})
+#
+# def get(self, request, *args, **kwargs):
+#     self.object = None
+#     return super().get(request, *args, **kwargs)
+#
+# def post(self, request, *args, **kwargs):
+#     self.object = None
+#     return super().post(request, *args, **kwargs)
 #
 #
 #
@@ -327,34 +313,3 @@ class DeleteNews(PermissionRequiredMixin, NewsDelete):
 # print(context['is_subscribe'])
 
 
-#
-# если запрашиваемый юзер. в группе. с фильтром (по неме=автор). присутствует
-#
-# self.request.user.groups.filter(name='authors').exists()
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
-#         context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
-#         return context
-
-
-# if not self.request.user.groups.filter(name='authors').exists():
-# print(self.request.user)
-# print(self.request.Post.Category.id)
-
-# print(self.request.user.groups.filter(name='authors'))
-# context['is_not_subscribe'] = not self.request.user.groups.filter(name='authors').exists()
-# print(context)
-# return context
-
-# if not self.request.user.groups.filter(name='authors').exists():
-# # print()
-# context['is_not_subscribe'] = not self.request.user.groups.filter(name='authors').exists()
-# # print(context)
-# return context
-# if self.request.user.groups.filter(name='authors').exists():
-#     context1['is_subscribe'] = self.request.user.groups.filter(name='authors').exists()
-#     return context1
-# print(qwe.filter(subscribers__username=self.request.user).exists())
