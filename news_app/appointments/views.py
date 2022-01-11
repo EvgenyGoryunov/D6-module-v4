@@ -40,12 +40,6 @@ class AppointmentView(View):
         print("НЕ ТОТ МЕТОД СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         appointment.save()
 
-        # отправка сообщений в указанном формате
-        # mail_admins(  # (2)
-        # subject=f'{appointment.client_name} {appointment.date.strftime("%d %m %Y")}',
-        # message=appointment.message,
-        # )
-
         # переход на данную форму после выполнения кода
         return redirect('make_appointment')  # (1)
 #

@@ -67,6 +67,7 @@ class NewsAdd(CreateView):
     form_class = NewsForm
     success_url = '/news/'
 
+    # Первый способ отправки сообщений подписчику (второй через сигналы сделан)
     # def post(self, request, *args, **kwargs):
     #     form = NewsForm(request.POST)
     #     # category_pk = request.POST['category'] # либо так можно, либо как ниже
@@ -108,7 +109,7 @@ class NewsAdd(CreateView):
     #         msg.attach_alternative(html_content, "text/html")
     #         print(html_content)
     #         msg.send()
-
+    #
         # return redirect('/news/')
 
 
