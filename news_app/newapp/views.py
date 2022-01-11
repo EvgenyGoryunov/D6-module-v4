@@ -65,50 +65,51 @@ class NewsDetail(DetailView):
 class NewsAdd(CreateView):
     template_name = 'news_add.html'
     form_class = NewsForm
+    success_url = '/news/'
 
-    def post(self, request, *args, **kwargs):
-        form = NewsForm(request.POST)
-        # category_pk = request.POST['category'] # либо так можно, либо как ниже
-        category_pk = request.POST.get('category')
-        sub_text = request.POST.get('text')
-        sub_title = request.POST.get('title')
-        category = Category.objects.get(pk=category_pk)
-        subscribers = category.subscribers.all()
-        # получаем адрес хоста и порта (в нашем случае 127.0.0.1:8000), чтоб в дальнейшем указать его в ссылке
-        # в письме, чтоб пользователь мог с письма переходить на наш сайт, на конкретную новость
-        host = request.META.get('HTTP_HOST')
+    # def post(self, request, *args, **kwargs):
+    #     form = NewsForm(request.POST)
+    #     # category_pk = request.POST['category'] # либо так можно, либо как ниже
+    #     category_pk = request.POST.get('category')
+    #     sub_text = request.POST.get('text')
+    #     sub_title = request.POST.get('title')
+    #     category = Category.objects.get(pk=category_pk)
+    #     subscribers = category.subscribers.all()
+    #     # получаем адрес хоста и порта (в нашем случае 127.0.0.1:8000), чтоб в дальнейшем указать его в ссылке
+    #     # в письме, чтоб пользователь мог с письма переходить на наш сайт, на конкретную новость
+    #     host = request.META.get('HTTP_HOST')
+    #
+    #
+    #     # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода от хакеров и прочего
+    #     if form.is_valid():
+    #         news = form.save(commit=False)
+    #         news.save()
+    #         print('Статья:', news)
+    #
+    #     for subscriber in subscribers:
+    #         # print('Адреса рассылки:', subscriber.email)
+    #
+    #         # (6)
+    #         html_content = render_to_string(
+    #             'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news, 'host': host})
+    #
+    #         # (7)
+    #         msg = EmailMultiAlternatives(
+    #             # Заголовок письма, тема письма
+    #             subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем разделе!',
+    #             # Наполнение письма
+    #             body=f'{sub_text[:50]}',
+    #             # От кого письмо (должно совпадать с реальным адресом почты)
+    #             from_email='factoryskill@yandex.ru',
+    #             # Кому отправлять, конкретные адреса рассылки, берем из переменной, либо можно явно прописать
+    #             to=[subscriber.email],
+    #         )
+    #
+    #         msg.attach_alternative(html_content, "text/html")
+    #         print(html_content)
+    #         msg.send()
 
-
-        # валидатор - чтоб данные в форме были корректно введены, без вредоносного кода от хакеров и прочего
-        if form.is_valid():
-            news = form.save(commit=False)
-            news.save()
-            print('Статья:', news)
-
-        for subscriber in subscribers:
-            print('Адреса рассылки:', subscriber.email)
-
-            # (6)
-            html_content = render_to_string(
-                'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news, 'host': host})
-
-            # (7)
-            msg = EmailMultiAlternatives(
-                # Заголовок письма, тема письма
-                subject=f'Здравствуй, {subscriber.username}. Новая статья в вашем разделе!',
-                # Наполнение письма
-                body=f'{sub_text[:50]}',
-                # От кого письмо (должно совпадать с реальным адресом почты)
-                from_email='factoryskill@yandex.ru',
-                # Кому отправлять, конкретные адреса рассылки, берем из переменной, либо можно явно прописать
-                to=[subscriber.email],
-            )
-
-            msg.attach_alternative(html_content, "text/html")
-            print(html_content)
-            msg.send()
-
-        return redirect('/news/')
+        # return redirect('/news/')
 
 
 # дженерик для редактирования объекта

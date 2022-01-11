@@ -14,7 +14,7 @@ def notify_managers_appointment(sender, instance, created, **kwargs):
     else:
         subject = f'Изменились данные {instance.client_name} {instance.date.strftime("%d %m %Y")}'
 
-    print("МЕТОД НУЖНЫЙ СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("МЕТОД 999999999999 НУЖНЫЙ СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print(subject)
 
     mail_managers(
