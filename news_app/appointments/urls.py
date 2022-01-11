@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import AppointmentView# , AppointView, add_subscribe_t, del_subscribe_t
 
 urlpatterns = [
@@ -8,6 +8,8 @@ urlpatterns = [
     path('', AppointmentView.as_view(), name='make_appointment'),
 
 ]
+
+
 
 
 

@@ -19,6 +19,7 @@ urlpatterns = [
     # модуль Д6 - подписка на рассылку на статью
     path('<int:pk>/add_subscribe/', add_subscribe, name='add_subscribe'),
     path('<int:pk>/del_subscribe/', del_subscribe, name='del_subscribe'),
+
 ]
 
 #
