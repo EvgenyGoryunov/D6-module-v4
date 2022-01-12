@@ -1,28 +1,11 @@
 from datetime import datetime
 
-from django.core.mail import mail_managers
-from django.db.models.signals import post_save
 from django.shortcuts import render, redirect
 from django.views import View
 
-from .models import Appointment
-from django.dispatch import receiver
-
-
-# @receiver(post_save, sender=Appointment)
-# def notify_managers_appointment(sender, instance, created, **kwargs):
-#     if created:
-#         subject = f'{instance.client_name} {instance.date.strftime("%d %m %Y")}'
-#     else:
-#         subject = f'Изменились данные {instance.client_name} {instance.date.strftime("%d %m %Y")}'
-#
-#     print("МЕТОД НУЖНЫЙ СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-#     print(subject)
-
-    # mail_managers(
-    #     subject=subject,
-    #     message=instance.message,
-    # )
+from newapp.models import Category, Post
+from .models import Appointment, Appoint
+from newapp.models import Category
 
 class AppointmentView(View):
     # получаем шаблон для ввода данных (make_appointment.html)
@@ -37,14 +20,71 @@ class AppointmentView(View):
             message=request.POST['message'],
         )
 
-        print("НЕ ТОТ МЕТОД СРАБОТАЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         appointment.save()
 
         # переход на данную форму после выполнения кода
         return redirect('make_appointment')  # (1)
+
+
+    # мои тесты
+class AppointView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        cat_id = 3
+        # subscribers = Category.objects.filter(pk=cat_id).values('subscribers__email')
+        # subscribers = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
+        category = Category.objects.get(pk=Post.objects.get(pk=Post.pk).category.pk)
+        # subscribers = category.subscribers.all()
+
+        # for subscriber in subscribers:
+        #     print('Адреса рассылки:', subscriber.email)
+
+        # for qaz in subscribers:
+        #     # print("имя:", qaz)
+        #     print("только почта:", qaz.email)
+        #     # print("ИД:", qaz.id)
+
+        # print(subscribers)
+        # subscribers = Category.objects.all()
+
+
+        # for qwe in subscribers:
+        #     print(qwe)
+
+        return render(request, 'test.html', {})
+
+
+
+        # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
+        # return render(request, 'test.html', {
+        #     'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
+        # })
+
+
+
+
+    # def post(self, request):
+    #     # user = request.user
+    #     appoint = Appoint(
+    #         idpk=request.POST['id_pk'],
+    #
+    #         idpkid=request.user,
+    #     )
+    #     appoint.save()
+
+        # return redirect('test')
+
+
+
+
+
+
+
 #
 #
 #
+        # print("СРАБОТАЛО СРАБОТАЛО СРАБОТАЛО СРАБОТАЛО")
 #
 #
 # (1)
@@ -108,22 +148,4 @@ class AppointmentView(View):
 #
 #
 #
-# мои тесты
-# class AppointView(View):
-#
-#     def get(self, request, *args, **kwargs):
-#         categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
-#         return render(request, 'test.html', {
-#             'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
-#         })
-#     #
-#     def post(self, request):
-#         # user = request.user
-#         appoint = Appoint(
-#             idpk=request.POST['id_pk'],
-#
-#             idpkid=request.user,
-#         )
-#         appoint.save()
-#
-#         return redirect('test')
+
