@@ -3,18 +3,14 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 
-from newapp.models import Category
+from newapp.models import Category, Post
 from .models import Appointment
 
 
 # мои тесты
 class AppointView(View):
 
-
     def get(self, request, *args, **kwargs):
-        print(request)
-        print(dir(request))
-        print(request.POST['pole_test'])
         return render(request, 'test_test.html')
 
 
@@ -29,34 +25,20 @@ class AppointView(View):
 
 
         pole_spisok2 = Category.objects.get(pk=pole_test).subscribers.all()
-        print('pole_spisok2:', pole_spisok2)
         for qwe in pole_spisok2:
-            print('отправляем почту по данному адресу:', qwe.email)
+            pass
 
 
 
-        pole_spisok3 = Category.objects.get(pk=pole_test).subscribers.all()
-        print('pole_spisok3:', pole_spisok3)
-        for qwe in pole_spisok3:
-            print('отправляем почту по данному адресу:', qwe.email)
-
+        pole_spisok3 = Post.objects.filter(category_id=pole_test, ).values('pk', 'title')
 
 
 
 
-
-
-        # получаем список адресов в зависимости от pk=pole_test
-        # # pole_spisok2 = list(Category.objects.filter(pk=pole_test).values('subscribers__email'))
-        # в данном цикле мы можем отправлять каждому пользователю или подписчику под данную категорию нужный список
-        # статей, следующий этап сформировать список статей в шаблоне html
-        # for qwe in pole_spisok2:
-        #     print(qwe.get('subscribers__email',))
-
-
-
-
-
+        news_from_category = []
+        for news in pole_spisok3:
+            new = (f'{news.get("title")}, http://127.0.0.1:8000/news/{news.get("pk")}')
+            news_from_category.append(new)
 
 
         return render(request, 'test_test.html', {
@@ -64,10 +46,30 @@ class AppointView(View):
             "pole_spisok_html1": pole_spisok1,
             "pole_spisok_html2": pole_spisok2,
             "pole_spisok_html3": pole_spisok3,
-        }
-                      )
+            "news_by_category": news_from_category,})
 
 
+        # qaz = Post.objects.filter(category_id=pole_test).values('pk').get("pk")
+        # print('qaz:', qaz)
+        # wsx = Post.objects.filter(category_id=pole_test).values('title').get("title")
+        # print('wsx:', wsx)
+
+
+        # print('pole_spisok3:', pole_spisok3)
+        # print('Список статей на данную тему:')
+        # pole_spisok4 = f'{qaz}, http://127.0.0.1:8000/news/{wsx}'
+        # print('Список статей на данную тему:', pole_spisok4)
+
+        # print(request)
+        # print(dir(request))
+        # print(request.POST['pole_test'])
+        #     print(qwer.get('title'), 'http://127.0.0.1:8000/news/', qwer.get('pk'), )
+        # получаем список адресов в зависимости от pk=pole_test
+        # # pole_spisok2 = list(Category.objects.filter(pk=pole_test).values('subscribers__email'))
+        # в данном цикле мы можем отправлять каждому пользователю или подписчику под данную категорию нужный список
+        # статей, следующий этап сформировать список статей в шаблоне html
+        # for qwe in pole_spisok2:
+        #     print(qwe.get('subscribers__email',))
 
         # return redirect ('test')
         # pole_spisok2 = list(Category.objects.filter(pk=pole_test).values('subscribers__username', 'subscribers__email'))

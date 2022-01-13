@@ -4,7 +4,8 @@
 
 {% block content %}
 <br>
-    <h2>Тестовая страница</h2>
+    <h2>Прошу, встречайте! </h2>
+    <h2>Свежие новости за неделю из категории {{ pole_spisok_html1 }} </h2>
 <br>
 <form method="post">
     {% csrf_token %}
@@ -31,12 +32,18 @@
 
 {% for categorys in pole_spisok_html2 %}
     <li> {{ categorys.email }} </li>
+<br>
 {% endfor%}
 
-{% for categorys in pole_spisok_html3 %}
-    <li> {{ categorys.email }} </li>
-{% endfor%}
+<hr>
+Поле тест 3
+<hr>
 
+
+{% for news_by_category in news_by_category %}
+    <li> {{ news_by_category }} </li>
+<br>
+{% endfor%}
 
 
 
