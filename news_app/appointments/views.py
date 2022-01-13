@@ -6,6 +6,8 @@ from django.views import View
 from newapp.models import Category, Post
 from .models import Appointment
 
+import datetime
+
 
 # мои тесты
 class AppointView(View):
@@ -21,6 +23,16 @@ class AppointView(View):
         else:
             pole_test = 1
 
+
+        pole_test2 = request.POST['test2']
+        if pole_test2:
+            pole_test2 = pole_test2
+        else:
+            # предыдущия неделя находится так
+            pole_test2 = datetime.datetime.now().isocalendar()[1]-1
+
+
+
         pole_spisok1 = Category.objects.get(pk=pole_test)
 
 
@@ -30,23 +42,26 @@ class AppointView(View):
 
 
 
-        pole_spisok3 = Post.objects.filter(category_id=pole_test, ).values('pk', 'title')
+        pole_spisok3 = Post.objects.filter(category_id=pole_test, dateCreation__week=pole_test2).values('pk', 'title', 'dateCreation')
+        # pole_spisok3 = Post.objects.filter(category_id=pole_test, author_id=pole_test2).values('pk', 'title', 'dateCreation')
 
 
 
 
         news_from_category = []
         for news in pole_spisok3:
-            new = (f'{news.get("title")}, http://127.0.0.1:8000/news/{news.get("pk")}')
+            new = (f'{news.get("title")}, {news.get("dateCreation")}, http://127.0.0.1:8000/news/{news.get("pk")}')
             news_from_category.append(new)
 
 
         return render(request, 'test_test.html', {
             'pole_test_html': pole_test,
+            'pole_test_html2': pole_test2,
             "pole_spisok_html1": pole_spisok1,
             "pole_spisok_html2": pole_spisok2,
             "pole_spisok_html3": pole_spisok3,
-            "news_by_category": news_from_category,})
+            "news_by_category": news_from_category,
+        })
 
 
         # qaz = Post.objects.filter(category_id=pole_test).values('pk').get("pk")
@@ -178,13 +193,3 @@ class AppointmentView(View):
 # msg.attach_alternative(html_content, "text/html")  # добавляем html
 #
 # msg.send()  # отсылаем
-
-# формируем запрос из БЗ из модели Category и присваиваем его результаты переменной categorys
-# запрос формируется следующим образом:
-# _____________1________2______3______4_________5___________________6_______________7________________8
-# categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')[:1]
-# 1-из модели Category (файл models.py приложения news_app) 2-взять объекты, значения(objects) 3-все(all())
-# 4-по полям (либо столбикам, либо колонкам таблицы) по названиям 5, 6, 7, 8
-#
-#
-#

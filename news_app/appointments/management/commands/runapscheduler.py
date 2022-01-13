@@ -17,6 +17,8 @@ def news_sender():
     print('hello from job')
 
 
+
+
 # функция, которая будет удалять неактуальные задачи
 def delete_old_job_executions(max_age=604_800):
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
@@ -41,7 +43,7 @@ class Command(BaseCommand):
             max_instances=1,
             replace_existing=True,
         )
-        logger.info("Added job 'news_sender'.")
+        logger.info("Добавлена работка 'news_sender'.")
 
         scheduler.add_job(
             delete_old_job_executions,
@@ -59,11 +61,11 @@ class Command(BaseCommand):
         )
 
         try:
-            logger.info("Starting scheduler")
+            logger.info("Задачник запущен")
             print('Задачник запущен')
             scheduler.start()
         except KeyboardInterrupt:
-            logger.info("Stopping scheduler...")
+            logger.info("Задачник остановлен...")
             scheduler.shutdown()
             print('Задачник остановлен')
-            logger.info("Scheduler shut down successfully!")
+            logger.info("Задачник остановлен успешно!")
