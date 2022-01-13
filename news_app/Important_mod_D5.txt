@@ -31,20 +31,3 @@ LOGIN_REDIRECT_URL. В данном случае это корневая стр�
 <!--                       aria-label="Toggle navigation">-->
 <!--                   <span class="navbar-toggler-icon"></span>-->
 <!--               </button>-->
-
-
-<!--{% if is_not_user %}-->
-<!--<button><a href="sign/anupgrade/">Не хочу быть автором!</a></button> {% endif %}-->
-
-
-<!--{% if is_not_premium %}-->
-
-<!--{% endif %}-->
-
-<!--{% if is_not_premium %}-->
-
-
-<!--{% endif %}-->
-
-<!--<p> {{}}  </p>-->
-<!--<p> {{}}  </p>-->

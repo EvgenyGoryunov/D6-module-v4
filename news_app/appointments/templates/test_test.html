@@ -1,0 +1,44 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Список подписчиков по группам {% endblock title %}
+
+{% block content %}
+<br>
+    <h2>Тестовая страница</h2>
+<br>
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Отправить">
+    <hr>
+    <label for="test">Test</label>
+    <input type="text" name="test">
+    <br>
+</form>
+<hr>
+Поле тест
+<hr>
+{{ pole_test_html }}
+<hr>
+Поле тест 1
+<hr>
+{{ pole_spisok_html1 }}
+<hr>
+Поле тест 2
+<hr>
+
+{{ pole_spisok_html2 }}
+<hr>
+
+{% for categorys in pole_spisok_html2 %}
+    <li> {{ categorys.email }} </li>
+{% endfor%}
+
+{% for categorys in pole_spisok_html3 %}
+    <li> {{ categorys.email }} </li>
+{% endfor%}
+
+
+
+
+
+{% endblock content %}

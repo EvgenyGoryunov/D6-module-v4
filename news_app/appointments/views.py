@@ -3,38 +3,85 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 
-from newapp.models import Category, Post
-from .models import Appointment, Appoint
 from newapp.models import Category
-
-class AppointmentView(View):
-    # получаем шаблон для ввода данных (make_appointment.html)
-    def get(self, request, ):
-        return render(request, 'make_appointment.html', {})
-
-    # отправляем на сервер нашу информацию и сохраняем ее в БД (сохраняем новый объект класса)
-    def post(self, request, ):
-        appointment = Appointment(
-            date=datetime.strptime(request.POST['date'], '%Y-%m-%d'),
-            client_name=request.POST['client_name'],
-            message=request.POST['message'],
-        )
-
-        appointment.save()
-
-        # переход на данную форму после выполнения кода
-        return redirect('make_appointment')  # (1)
+from .models import Appointment
 
 
-    # мои тесты
+# мои тесты
 class AppointView(View):
 
-    def get(self, request, *args, **kwargs):
 
-        cat_id = 3
+    def get(self, request, *args, **kwargs):
+        print(request)
+        print(dir(request))
+        print(request.POST['pole_test'])
+        return render(request, 'test_test.html')
+
+
+    def post(self, request):
+        pole_test = request.POST['test']
+        if pole_test:
+            pole_test = pole_test
+        else:
+            pole_test = 1
+
+        pole_spisok1 = Category.objects.get(pk=pole_test)
+
+
+        pole_spisok2 = Category.objects.get(pk=pole_test).subscribers.all()
+        print('pole_spisok2:', pole_spisok2)
+        for qwe in pole_spisok2:
+            print('отправляем почту по данному адресу:', qwe.email)
+
+
+
+        pole_spisok3 = Category.objects.get(pk=pole_test).subscribers.all()
+        print('pole_spisok3:', pole_spisok3)
+        for qwe in pole_spisok3:
+            print('отправляем почту по данному адресу:', qwe.email)
+
+
+
+
+
+
+
+        # получаем список адресов в зависимости от pk=pole_test
+        # # pole_spisok2 = list(Category.objects.filter(pk=pole_test).values('subscribers__email'))
+        # в данном цикле мы можем отправлять каждому пользователю или подписчику под данную категорию нужный список
+        # статей, следующий этап сформировать список статей в шаблоне html
+        # for qwe in pole_spisok2:
+        #     print(qwe.get('subscribers__email',))
+
+
+
+
+
+
+
+        return render(request, 'test_test.html', {
+            'pole_test_html': pole_test,
+            "pole_spisok_html1": pole_spisok1,
+            "pole_spisok_html2": pole_spisok2,
+            "pole_spisok_html3": pole_spisok3,
+        }
+                      )
+
+
+
+        # return redirect ('test')
+        # pole_spisok2 = list(Category.objects.filter(pk=pole_test).values('subscribers__username', 'subscribers__email'))
+        # print(type(pole_spisok1))
+        # выывести список подписоты одной статьи (их мыло)
+
+        # category = Category.objects.get(pk=Post.objects.get(pk=instance.pk).category.pk)
+        # subscribers = category.subscribers.all()
+
+        # print('Сообщение:', pole_test)
+
         # subscribers = Category.objects.filter(pk=cat_id).values('subscribers__email')
         # subscribers = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
-        category = Category.objects.get(pk=Post.objects.get(pk=Post.pk).category.pk)
+        # category = Category.objects.get(pk=Post.objects.get(pk=Post.pk).category.pk)
         # subscribers = category.subscribers.all()
 
         # for subscriber in subscribers:
@@ -48,43 +95,34 @@ class AppointView(View):
         # print(subscribers)
         # subscribers = Category.objects.all()
 
-
         # for qwe in subscribers:
         #     print(qwe)
-
-        return render(request, 'test.html', {})
-
-
-
         # categorys = Category.objects.all().values('subscribers', 'subscribers__username', 'name', 'subscribers__email')
-        # return render(request, 'test.html', {
+        # return render(request, 'test_test.html', {
         #     'subs': categorys  # чтоб получить все значения из БД будем проходиться циклом в html страничке
         # })
 
 
+class AppointmentView(View):
+    # получаем шаблон для ввода данных (make_appointment.html)
+    def get(self, request, ):
+        return render(request, 'make_appointment.html', {})
 
+    # отправляем на сервер нашу информацию и сохраняем ее в БД (сохраняем новый объект класса)
+    def post(self, request, ):
+        appointment = Appointment(
+            date=datetime.strptime(request.POST['date'], '%Y-%m-%d'),
+            client_name=request.POST['client_name'],
+            message=request.POST['message'],
+        )
+        appointment.save()
 
-    # def post(self, request):
-    #     # user = request.user
-    #     appoint = Appoint(
-    #         idpk=request.POST['id_pk'],
-    #
-    #         idpkid=request.user,
-    #     )
-    #     appoint.save()
-
-        # return redirect('test')
-
-
-
-
-
-
+        # переход на данную форму (представление) после выполнения кода
+        return redirect('make_appointment')  # (1)
 
 #
 #
 #
-        # print("СРАБОТАЛО СРАБОТАЛО СРАБОТАЛО СРАБОТАЛО")
 #
 #
 # (1)
@@ -148,4 +186,3 @@ class AppointView(View):
 #
 #
 #
-

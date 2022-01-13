@@ -9,17 +9,20 @@ from .models import Post, Category
 
 
 # создаём функцию обработчик с параметрами под регистрацию сигнала
-# выполняет действие при каком-либо действии пользователя, в нашем случае - сохранение в БД записи
+# выполняет действие при каком-либо действии пользователя, в нашем случае -
+# сохранение в БД модели Post записи
 @receiver(post_save, sender=Post)
 def send_sub_mail(sender, instance, created, **kwargs):
 
     global subscriber
     sub_text = instance.text
     category = Category.objects.get(pk=Post.objects.get(pk=instance.pk).category.pk)
-    subscribers = category.subscribers.all()
-    # host = settings.ALLOWED_HOSTS
-    post = instance
+    print('category:', category)
+    print(type(category))
 
+    subscribers = category.subscribers.all()
+    print(subscribers)
+    post = instance
 
     for subscriber in subscribers:
         print('Адреса рассылки:', subscriber.email)
@@ -37,6 +40,6 @@ def send_sub_mail(sender, instance, created, **kwargs):
     # print('Письмо от сигнала')
     # print(html_content)
 
-    msg.send()
-    #
+    # msg.send()
+
     return redirect('/news/')
