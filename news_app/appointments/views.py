@@ -23,9 +23,9 @@ class AppointView(View):
         pole_test2 = request.POST['test2']
         if pole_test2:
             pole_test2 = pole_test2
-        else:
+        # else:
             # предыдущия неделя находится так
-            pole_test2 = datetime.now().isocalendar()[1] - 1
+            # pole_test2 = datetime.now().isocalendar()[1] - 1
 
         pole_spisok1 = Category.objects.get(pk=pole_test)
 
@@ -33,28 +33,51 @@ class AppointView(View):
         for qwe in pole_spisok2:
             pass
 
-        pole_spisok3 = Post.objects.filter(category_id=pole_test, dateCreation__week=pole_test2).values('pk', 'title',
-                                                                                                        'dateCreation')
+        # pole_spisok3 = Post.objects.filter(category_id=pole_test,
+        #                                    dateCreation__week=datetime.now().isocalendar()[1] - 1).values('pk', 'title',
+        #                                                                                                 'dateCreation')
         # pole_spisok3 = Post.objects.filter(category_id=pole_test, author_id=pole_test2).values('pk', 'title', 'dateCreation')
 
-        news_from_category = []
-        for news in pole_spisok3:
-            new = (f'{news.get("title")}, {news.get("dateCreation")}, http://127.0.0.1:8000/news/{news.get("pk")}')
-            news_from_category.append(new)
+        # news_from_category = []
+        # for news in pole_spisok3:
+        #     new = (f'{news.get("title")}, {news.get("dateCreation")}, http://127.0.0.1:8000/news/{news.get("pk")}')
+        #     news_from_category.append(new)
+
+        for category in Category.objects.all():
+            # print(qaz.id, qaz.name, qaz.subscribers.all())
+            # print("------------", qaz.id, qaz.name)
+            news_from_each_category = []
+
+            for news in Post.objects.filter(category_id=category.id,
+                                           dateCreation__week=datetime.now().isocalendar()[1] - 1).values('pk', 'title',
+                                                                                                        'dateCreation'):
+                new = (f'{news.get("title")}, {news.get("dateCreation")}, http://127.0.0.1:8000/news/{news.get("pk")}')
+                news_from_each_category.append(new)
+            print("Письма отправлены подписчикам категории:", category.id, category.name)
+            for qaz in news_from_each_category:
+                print(qaz)
+            # print('\n', news_from_category)
+            qwe = category.subscribers.all()
+            for wsx in qwe:
+                print('Новости отправлены на', wsx.email)
+
+
+
+
+
 
         return render(request, 'test_test.html', {
             'pole_test_html': pole_test,
             'pole_test_html2': pole_test2,
             "pole_spisok_html1": pole_spisok1,
             "pole_spisok_html2": pole_spisok2,
-            "pole_spisok_html3": pole_spisok3,
-            "news_by_category": news_from_category,
+            # "pole_spisok_html3": pole_spisok3,
+            # "news_by_category": news_from_category,
         })
 
-        # qaz = Post.objects.filter(category_id=pole_test).values('pk').get("pk")
-        # print('qaz:', qaz)
-        # wsx = Post.objects.filter(category_id=pole_test).values('title').get("title")
-        # print('wsx:', wsx)
+
+
+
 
         # print('pole_spisok3:', pole_spisok3)
         # print('Список статей на данную тему:')

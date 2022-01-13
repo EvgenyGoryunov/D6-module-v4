@@ -22,6 +22,9 @@ def news_sender():
 
 
 
+
+
+
 # функция, которая будет удалять неактуальные задачи
 def delete_old_job_executions(max_age=604_800):
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
