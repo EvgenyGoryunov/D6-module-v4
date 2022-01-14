@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Недельная рассылка новостей по категории: {{ category_name }} </title>
+    <title> Недельная рассылка новостей по категории: {{ category_name  }} </title>
 </head>
 <body>
-    <h1> Здравствуйте, {{ user }}, новые статьи за прошлую неделю (№:{{ week_number_last }}) в вашем разделе! </h1>
+    <h1> Здравствуйте, {{ user }}, новые статьи из категории {{ category_name  }} за прошлую неделю ({{ week_number_last }}) в вашем разделе! </h1>
 <hr>
 {% for news in text %}
 {{ news }}

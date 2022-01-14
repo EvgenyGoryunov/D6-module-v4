@@ -135,6 +135,7 @@ class NewsDelete(DeleteView):
 @login_required
 def add_subscribe(request, **kwargs):
     pk = request.GET.get('pk', )
+    print('Пользователь', request.user, 'добавлен в подписчики категории:', Category.objects.get(pk=pk))
     Category.objects.get(pk=pk).subscribers.add(request.user)
     return redirect('/news/')
 
@@ -143,6 +144,7 @@ def add_subscribe(request, **kwargs):
 @login_required
 def del_subscribe(request, **kwargs):
     pk = request.GET.get('pk', )
+    print('Пользователь', request.user, 'удален из подписчиков категории:', Category.objects.get(pk=pk))
     Category.objects.get(pk=pk).subscribers.remove(request.user)
     return redirect('/news/')
 
