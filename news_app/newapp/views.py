@@ -92,7 +92,7 @@ class NewsAdd(CreateView):
     #
     #         # (6)
     #         html_content = render_to_string(
-    #             'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': news, 'host': host})
+    #             'mail_sender.html', {'user': subscriber, 'text': sub_text[:50], 'post': news, 'host': host})
     #
     #         # (7)
     #         msg = EmailMultiAlternatives(
